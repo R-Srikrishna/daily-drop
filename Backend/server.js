@@ -14,6 +14,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send("Daily Drop API is running");
+});
+
 app.use(
   cors({
     origin: [
