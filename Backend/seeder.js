@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import mongoose from "mongoose";
 import connectDB from "./config/db.js";
 import Product from "./models/product.js";
 import products from "./data/products.js";
@@ -10,14 +9,19 @@ const importData = async () => {
   try {
     await connectDB();
 
-    await Product.deleteMany();
-    await Product.insertMany(products);
+    const existingProducts = await Product.countDocuments();
 
-    console.log("Products inserted successfully!");
+    if (existingProducts === 0) {
+      await Product.insertMany(products);
+      console.log("Products inserted successfully!");
+    } else {
+      console.log("Products already exist in database. Seeder skipped.");
+    }
+
     process.exit();
 
   } catch (error) {
-    console.error(error);
+    console.error("Seeder error:", error);
     process.exit(1);
   }
 };
