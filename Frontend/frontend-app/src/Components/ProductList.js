@@ -4,14 +4,15 @@ import axios from "axios";
 function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
   const [products, setProducts] = useState([]);
 
+  // Backend base URL
+  const API = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_PRODUCTS_API_URL)
+      .get(`${API}/api/products`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.error("Error fetching products:", err));
-  }, []);
-
-  console.log(process.env.REACT_APP_PRODUCTS_API_URL);
+  }, [API]);
 
   let filtered =
     activeCategory === "all"
@@ -24,16 +25,18 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
     filtered.sort(
       (a, b) =>
         (b.original - b.price) / b.original -
-        (a.original - a.price) / a.original
+        (a.original - a.price) / a.original,
     );
 
   return (
     <div className="products-section">
+      {" "}
       <div className="section-head">
-        <h2>Today's Drops</h2>
-        <div className="section-badge">🔥 Limited Time</div>
+        {" "}
+        <h2>Today's Drops</h2>{" "}
+        <div className="section-badge">🔥 Limited Time</div>{" "}
       </div>
-
+      ```
       {filtered.length === 0 ? (
         <div className="no-products">
           No products in this category yet. Check back soon! 🚀
@@ -42,11 +45,13 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
         <div className="products-grid">
           {filtered.map((product, i) => {
             const disc = Math.round(
-              (1 - product.price / product.original) * 100
+              (1 - product.price / product.original) * 100,
             );
+
             const stockPct = Math.round(
-              (product.stock / product.maxStock) * 100
+              (product.stock / product.maxStock) * 100,
             );
+
             const inCart = cartIds.includes(product._id);
 
             return (
@@ -56,13 +61,13 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
                 style={{ animationDelay: `${i * 0.07}s` }}
               >
                 <div className="card-img-wrap">
-                  {product.image ? (
+                  {product.image && (
                     <img
-                      src={`${process.env.REACT_APP_API_URL}${product.image}`}
+                      src={`${API}${product.image}`}
                       alt={product.name}
                       className="card-img"
                     />
-                  ) : null}
+                  )}
 
                   {!product.image && (
                     <div className="card-emoji-fallback">{product.emoji}</div>
@@ -82,6 +87,7 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
                       {"★".repeat(Math.round(product.rating))}
                       {"☆".repeat(5 - Math.round(product.rating))}
                     </span>
+
                     <span className="rating-count">
                       {product.rating} ({product.reviews?.toLocaleString()})
                     </span>
@@ -92,6 +98,7 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
                       <span className="price-now">
                         ₹{product.price.toLocaleString()}
                       </span>
+
                       <span className="price-old">
                         ₹{product.original.toLocaleString()}
                       </span>
@@ -110,6 +117,7 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
                       <span>{product.stock} left</span>
                       <span>{100 - stockPct}% sold</span>
                     </div>
+
                     <div className="stock-track">
                       <div
                         className="stock-fill"
