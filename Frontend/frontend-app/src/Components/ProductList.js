@@ -36,7 +36,6 @@ function ProductList({ addToCart, activeCategory, sortBy, cartIds = [] }) {
         <h2>Today's Drops</h2>{" "}
         <div className="section-badge">🔥 Limited Time</div>{" "}
       </div>
-      ```
       {filtered.length === 0 ? (
         <div className="no-products">
           No products in this category yet. Check back soon! 🚀
