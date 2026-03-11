@@ -14,7 +14,15 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://daily-drop-4jpe.vercel.app",
+    ],
+  })
+);
+
 app.use(express.json());
 
 app.use("/images", express.static(path.join(__dirname, "public/images")));
@@ -32,8 +40,10 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    app.listen(process.env.PORT || 5000, () => {
-      console.log("Server running on port 5000");
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
 
   } catch (error) {
