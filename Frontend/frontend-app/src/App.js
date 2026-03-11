@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ProductList from "./Components/ProductList";
 import Cart from "./Components/Cart";
-import { FaShoppingCart, FaBolt } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import "./App.css";
 
 function App() {
